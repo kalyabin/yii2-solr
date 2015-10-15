@@ -1,10 +1,9 @@
 <?php
 
-namespace sammaye\solr;
+namespace kalyabin\solr;
 
-use Yii;
-use yii\base\Component;
 use Solarium\Client as SolrClient;
+use yii\base\Component;
 
 class Client extends Component
 {

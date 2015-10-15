@@ -1,19 +1,25 @@
 {
-    "name": "sammaye/yii2-solr",
+    "name": "kalyabin/yii2-solr",
     "description": "Solr plugin for the Yii2 framework built ontop of Solarium",
     "type": "yii2-extension",
-    "keywords": ["sammaye", "yii2", "extension", "yii2-extension", "Yii2 Extension", "solr", "solarium"],
+    "keywords": ["kalyabin", "sammaye", "yii2", "extension", "yii2-extension", "Yii2 Extension", "solr", "solarium"],
     "license": "BSD-3-Clause",
+    "version": "dev-master",
+    "reference": "2341e4fb85f3d91931030b50d2311580",
     "authors": [
         {
             "name": "Sammaye",
             "homepage": "http://sammaye.wordpress.com"
+        },
+        {
+            "name": "Max Kalyabin",
+            "email": "maksim@kalyabin.ru"
         }
     ],
     "require": {
         "solarium/solarium": "*"
     },
     "autoload": {
-        "psr-4": { "sammaye\\solr\\": "" }
+        "psr-4": { "kalyabin\\solr\\": "" }
     }
 }

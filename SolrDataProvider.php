@@ -1,25 +1,24 @@
 <?php
 
-namespace sammaye\solr;
+namespace kalyabin\solr;
 
-use Yii;
 use yii\base\Model;
 use yii\base\InvalidConfigException;
 use yii\data\BaseDataProvider;
 use yii\di\Instance;
 use Solarium\Core\Query\Query as SolrQuery;
-use sammaye\solr\Client;
+use kalyabin\solr\Client;
 
 /**
  * This is the SolrDataProvider
- * 
+ *
  * You use this to interact with widgets etc to provide them data.
- * 
+ *
  * Basic usage of this class would be:
- * 
+ *
  * $query = Yii::$app->solr->createSelect();
  * $query->setQuery('(alt_subject_mpath:' . $model->path . ' OR alt_subject_mpath:' . $model->path . '.*) AND live:1');
- * 
+ *
  * new SolrDataProvider([
  * 		'query' => $query,
  * 		'modelClass' => 'common\models\SolrResult',
@@ -31,7 +30,7 @@ use sammaye\solr\Client;
  * 			]
  * 		]
  * ]);
- * 
+ *
  */
 class SolrDataProvider extends BaseDataProvider
 {
@@ -40,7 +39,7 @@ class SolrDataProvider extends BaseDataProvider
 	 * if it is not explicitly set.
 	 */
 	public $query;
-	
+
 	/**
 	 * @var string|callable the column that is used as the key of the data models.
 	 * This can be either a column name, or a callable that returns the key value of a given data model.
@@ -53,18 +52,18 @@ class SolrDataProvider extends BaseDataProvider
 	 * @see getKeys()
 	 */
 	public $key;
-	
+
 	/**
 	 * @var Connection|string the Solr connection object or the application component ID of the Solr connection.
 	 * If not set, the default solr connection will be used.
 	 */
 	public $solr;
-	
+
 	/**
 	 * Just like in Yii1 this tells the data provider what class/model to populate
 	 */
 	public $modelClass;
-	
+
 	public function init()
 	{
 		parent::init();
@@ -74,7 +73,7 @@ class SolrDataProvider extends BaseDataProvider
 			$this->solr = Instance::ensure('solr', Client::className());
 		}
 	}
-	
+
 	public function prepareModels()
 	{
 		if (!$this->query instanceof SolrQuery) {
@@ -98,7 +97,7 @@ class SolrDataProvider extends BaseDataProvider
 		}
 		return $models;
 	}
-	
+
 	public function prepareKeys($models)
 	{
 		$keys = [];
@@ -112,14 +111,14 @@ class SolrDataProvider extends BaseDataProvider
 			}
 			return $keys;
 		} else {
-			
+
 			if($this->modelClass){
 				/** @var \yii\db\ActiveRecord $class */
 				$class = $this->modelClass;
 				$model = new $class;
-				
+
 				if($model instanceof \yii\db\ActiveRecord){
-					
+
 					$pks = $class::primaryKey();
 					if (count($pks) === 1) {
 						$pk = $pks[0];
@@ -141,7 +140,7 @@ class SolrDataProvider extends BaseDataProvider
 			return array_keys($models);
 		}
 	}
-	
+
 	public function prepareTotalCount()
 	{
 		if (!$this->query instanceof SolrQuery) {
@@ -149,10 +148,10 @@ class SolrDataProvider extends BaseDataProvider
 		}
 		$query = clone $this->query;
 		$resultset = $this->solr->select($query);
-		
+
 		return (int) $resultset->getNumFound();
 	}
-	
+
 	public function setSort($value)
 	{
 		parent::setSort($value);
