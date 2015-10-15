@@ -1,7 +1,7 @@
 {
     "name": "kalyabin/yii2-solr",
     "description": "Solr plugin for the Yii2 framework built ontop of Solarium",
-    "type": "yii2-extension",
+    "type": "package",
     "keywords": ["kalyabin", "sammaye", "yii2", "extension", "yii2-extension", "Yii2 Extension", "solr", "solarium"],
     "license": "BSD-3-Clause",
     "version": "dev-master",
