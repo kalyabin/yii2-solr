@@ -9,5 +9,5 @@ namespace kalyabin\solr;
  */
 interface SolrDocumentInterface
 {
-	public static function populateFromSolr($doc);
+    public static function populateFromSolr($doc);
 }
