@@ -60,7 +60,25 @@ class SolrDataProvider extends BaseDataProvider
     public $solr;
 
     /**
-     * Just like in Yii1 this tells the data provider what class/model to populate
+     * @var string|callable class name to build results objects. It's may be string (strong class name), or callbale.
+     * Results class may be implemented by SolrDocumentInterface.
+     *
+     * Callable method returns strong class name by found document.
+     *
+     * Example to callable:
+     *
+     * ```php
+     * function ($doc) {
+     *     $fields = $doc->getFields();
+     *     if ($fields['type'] == 'type1') {
+     *         return \app\models\Type1::className();
+     *     }
+     *     else {
+     *         return \app\models\Etc::className();
+     *     }
+     * }
+     * ```
+     * @see get()
      */
     public $modelClass;
 
@@ -92,7 +110,7 @@ class SolrDataProvider extends BaseDataProvider
         $resultset = $this->solr->select($this->query);
         $models = [];
         foreach($resultset as $result){
-            $cname = $this->modelClass;
+            $cname = $this->getModelClass($result);
             $models[] = $cname::populateFromSolr($result);
         }
         return $models;
@@ -112,9 +130,9 @@ class SolrDataProvider extends BaseDataProvider
             return $keys;
         } else {
 
-            if($this->modelClass){
+            if ($this->modelClass){
                 /** @var \yii\db\ActiveRecord $class */
-                $class = $this->modelClass;
+                $class = $this->getModelClass();
                 $model = new $class;
 
                 if($model instanceof \yii\db\ActiveRecord){
@@ -157,7 +175,8 @@ class SolrDataProvider extends BaseDataProvider
         parent::setSort($value);
         if (($sort = $this->getSort()) !== false && empty($sort->attributes)) {
             /** @var Model $model */
-            $model = new $this->modelClass;
+            $modelClass = $this->getModelClass();
+            $model = new $modelClass;
             if($model instanceof Model){
                 foreach ($model->attributes() as $attribute) {
                     $sort->attributes[$attribute] = [
@@ -168,5 +187,19 @@ class SolrDataProvider extends BaseDataProvider
                 }
             }
         }
+    }
+
+    /**
+     * Returns class of model by document interface.
+     *
+     * @param mixed $doc solr document interface, may be null
+     * @return string class name
+     */
+    public function getModelClass($doc = null)
+    {
+        if (is_callable($this->modelClass)) {
+            return call_user_func_array($this->modelClass, [$doc]);
+        }
+        return $this->modelClass;
     }
 }
